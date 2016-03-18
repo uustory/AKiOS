@@ -37,10 +37,19 @@ namespace AKiOS
             ret.Handle = Functions.NSStringFromClass(classPtr);
             return ret;
         }
+        
+        public NSString()
+        {
+        }
+
+        public NSString(string str)
+        {
+            this.Handle = Class.FindByName("NSString").Call("stringWithUTF8String:", str).Handle;
+        }
 
         public static NSString StringWithUTF8String(string str)
         {
-            return Class.FindByName("NSString").Call("stringWithUTF8String:", str).Cast<NSString>();
+            return new NSString(str);
         }
 
         public string UTF8String()

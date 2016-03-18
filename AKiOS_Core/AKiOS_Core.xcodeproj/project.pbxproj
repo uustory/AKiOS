@@ -15,7 +15,6 @@
 		A91193B918ED8F5D00851AF0 /* libAKiOS_Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A91193A118ED8F5D00851AF0 /* libAKiOS_Core.a */; };
 		A91193BF18ED8F5D00851AF0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A91193BD18ED8F5D00851AF0 /* InfoPlist.strings */; };
 		A91193C118ED8F5D00851AF0 /* AKiOS_CoreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A91193C018ED8F5D00851AF0 /* AKiOS_CoreTests.m */; };
-		A91193CA18ED905500851AF0 /* libAKiOS_Core.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A91193A118ED8F5D00851AF0 /* libAKiOS_Core.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,19 +26,6 @@
 			remoteInfo = AKiOS_Core;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		A911939F18ED8F5D00851AF0 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /Users/xxx/iqsoftware.by/plugins/trunk/akmp/AKiOSMagicUnityTest/Assets/Plugins/iOS;
-			dstSubfolderSpec = 0;
-			files = (
-				A91193CA18ED905500851AF0 /* libAKiOS_Core.a in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A91193A118ED8F5D00851AF0 /* libAKiOS_Core.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAKiOS_Core.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -152,7 +138,6 @@
 			buildPhases = (
 				A911939D18ED8F5D00851AF0 /* Sources */,
 				A911939E18ED8F5D00851AF0 /* Frameworks */,
-				A911939F18ED8F5D00851AF0 /* CopyFiles */,
 			);
 			buildRules = (
 			);

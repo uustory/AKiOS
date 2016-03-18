@@ -30,31 +30,9 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-typedef struct MonoDomain_s MonoDomain;
-typedef struct MonoAssembly_s MonoAssembly;
-typedef struct MonoImage_s MonoImage;
-typedef struct MonoClass_s MonoClass;
-typedef struct MonoObject_s MonoObject;
-typedef struct MonoMethodDesc_s MonoMethodDesc;
-typedef struct MonoMethod_s MonoMethod;
-typedef struct MonoString_s MonoString;
 typedef int    gboolean;
 typedef void * gpointer;
 
-
-MonoDomain*     mono_domain_get();
-MonoAssembly*   mono_domain_assembly_open(MonoDomain* domain, const char *assemblyName);
-MonoImage*      mono_assembly_get_image(MonoAssembly* assembly);
-MonoMethodDesc* mono_method_desc_new(const char* methodString, gboolean useNamespace);
-MonoMethodDesc* mono_method_desc_free(MonoMethodDesc* desc);
-MonoMethod*     mono_method_desc_search_in_image(MonoMethodDesc* methodDesc, MonoImage* image);
-MonoObject*     mono_runtime_invoke(MonoMethod* method, void* obj, void** params, MonoObject** exc);
-MonoClass*      mono_class_from_name (MonoImage *image, const char* name_space, const char *name);
-MonoString*     mono_string_new(MonoDomain* domain, const char* str);
-gpointer        mono_object_unbox(MonoObject *obj);
-
-
-static MonoMethod * _CallbackMethod = 0;
 static void * _returnedBytes = 0;
 
 void * AKiOS_Core_CreateClass(const char * szClassName, const char * szSuperClassName)
@@ -74,59 +52,6 @@ void AKiOS_Core_AddProtocol(void * pClass, const char * szProtocolName)
     NSString * sProtocolName = [[NSString alloc] initWithCString:szProtocolName encoding:NSUTF8StringEncoding];
     Protocol * protocol = NSProtocolFromString(sProtocolName);
     class_addProtocol(aClass, protocol);
-}
-
-MonoMethod * _AKiOS_Core_GetCallbackMethod()
-{
-    if (_CallbackMethod == 0)
-    {
-//        NSString * assemblyPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Data/Managed/Assembly-CSharp-firstpass.dll"];
-        NSString * assemblyPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"Data/Managed/AKiOS.dll"];
-        
-        MonoDomain * domain = mono_domain_get();
-        MonoAssembly * monoAssembly = mono_domain_assembly_open(domain, assemblyPath.UTF8String);
-        MonoImage * monoImage = mono_assembly_get_image(monoAssembly);
-        MonoMethodDesc * desc = mono_method_desc_new("AKiOS.Class:CallbackFunction(int)", true);
-        _CallbackMethod = mono_method_desc_search_in_image(desc, monoImage);
-        mono_method_desc_free(desc);
-    }
-    return _CallbackMethod;
-}
-
-id _AKiOS_Core_MethodImplementation(id self_, SEL cmd_, ...)
-{
-    void * arguments[10];
-    arguments[0] = (__bridge void*)self_;
-    arguments[1] = (void *)sel_getName(cmd_);
-    
-    NSLog(@"_AKiOS_Core_MethodImplementation(%p, %s)", arguments[0], arguments[1]);
-    
-    va_list vaArgs;
-    va_start(vaArgs, cmd_);
-    for (int i = 2; i < sizeof(arguments) / sizeof(arguments[0]); i++)
-    {
-        arguments[i] = va_arg(vaArgs, void*);
-    }
-    va_end(vaArgs);
-
-    void * pArguments = arguments;
-    void * monoArgs[1];
-    monoArgs[0] = &pArguments;
-    
-    MonoObject * resultObject = mono_runtime_invoke(_AKiOS_Core_GetCallbackMethod(), NULL, monoArgs, NULL);
-    
-    void * resultPointer = *(void**)mono_object_unbox(resultObject);
-    id resultId = (__bridge id)resultPointer;
-    return resultId;
-}
-
-void AKiOS_Core_AddMethod(void * pClass, const char * szMethodName, const char * szTypes)
-{
-    Class aClass = (__bridge Class)pClass;
-    NSString * sMethodName = [[NSString alloc] initWithCString:szMethodName encoding:NSUTF8StringEncoding];
-    SEL aSelector = NSSelectorFromString(sMethodName);
-    
-    class_addMethod(aClass, aSelector, _AKiOS_Core_MethodImplementation, szTypes ? szTypes : "@@:*");
 }
 
 void AKiOS_Core_RegisterClass(void * pClass)

@@ -93,6 +93,16 @@ namespace AKiOS
             return NSString.FromClassPtr(Call("class").AsIntPtr()).ToString();
         }
 
+        public NSObject valueForKey(string key)
+        {
+            return this.Call("valueForKey:", new NSString(key));
+        }
+
+        public void setValueForKey(string key, NSObject v)
+        {
+            this.Call("setValue:ForKey:", new NSString(key), v);
+        }
+
         public Core.UnknownValue Call(string methodName, params object[] argObjects)
         {
             var argPtrs = new List<IntPtr>();

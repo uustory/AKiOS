@@ -56,9 +56,6 @@ namespace AKiOS
         internal static extern void AKiOS_Core_AddProtocol(IntPtr pClass, string szProtocolName);
 
         [DllImport("__Internal")]
-        internal static extern void AKiOS_Core_AddMethod(IntPtr pClass, string szMethodName, string szTypes);
-
-        [DllImport("__Internal")]
         internal static extern void AKiOS_Core_RegisterClass(IntPtr pClass);
 
         internal static Dictionary<string, Action<Arguments>> _methods = new Dictionary<string, Action<Arguments>>();
@@ -91,22 +88,6 @@ namespace AKiOS
         public void AddProtocol(string protocolName)
         {
             AKiOS_Core_AddProtocol(this.Handle, protocolName);
-        }
-
-        public void AddMethod(string methodName, Action<Arguments> method)
-        {
-            string key = ClassName + "###" + methodName;
-            Functions.NSLog("AddMethod " + key);
-            _methods [key] = (args) => {
-                try
-                {
-                    method(args);
-                }
-                catch
-                {
-                }
-            };
-            AKiOS_Core_AddMethod(Handle, methodName, null);
         }
 
         public void Register()
