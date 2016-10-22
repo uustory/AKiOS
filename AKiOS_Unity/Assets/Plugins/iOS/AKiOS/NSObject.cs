@@ -35,6 +35,9 @@ namespace AKiOS
         [DllImport("__Internal")]
         internal static extern IntPtr AKiOS_Core_CallMethod(IntPtr pInstance, string szMethodName, IntPtr pArgs, int argsCount, IntPtr ppReturnedBytes);
 
+        [DllImport("__Internal")]
+        internal static extern bool AKiOS_Core_HasMethod(IntPtr pInstance, string szMethodName);
+        
         public IntPtr Handle { get; protected internal set; }
 
         public bool IsNil { get { return Handle == IntPtr.Zero; } }
@@ -100,7 +103,12 @@ namespace AKiOS
 
         public void setValueForKey(string key, NSObject v)
         {
-            this.Call("setValue:ForKey:", new NSString(key), v);
+            this.Call("setValue:forKey:", new NSString(key), v);
+        }
+
+        public bool HasMethod(string methodName)
+        {
+            return AKiOS_Core_HasMethod(Handle, methodName);
         }
 
         public Core.UnknownValue Call(string methodName, params object[] argObjects)

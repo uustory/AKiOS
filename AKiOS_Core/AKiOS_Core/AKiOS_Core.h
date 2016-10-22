@@ -35,6 +35,7 @@ extern "C" {
 
     void * AKiOS_Core_GetClass(const char * szClassName);
     
+    BOOL AKiOS_Core_HasMethod(void * pInstance, const char * szMethodName);
     void * AKiOS_Core_CallMethod(void * pInstance, const char * szMethodName, void ** ppArgs, int argsCount, void ** ppReturnedBytes);
     
 #if defined __cplusplus

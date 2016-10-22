@@ -66,16 +66,24 @@ void * AKiOS_Core_GetClass(const char * szClassName)
     return (__bridge void*)NSClassFromString(sClassName);
 }
 
-//void * AKiOS_Core_NewInstance(void * pClass)
-//{
-//    Class aClass = (__bridge Class)pClass;
-//    id anInstance = [aClass new];
-//    return (__bridge void*)anInstance;
-//}
+BOOL AKiOS_Core_HasMethod(void * pInstance, const char * szMethodName)
+{
+    id anInstance = (__bridge id)pInstance;
+    
+    NSString * sMethodName = [[NSString alloc] initWithCString:szMethodName encoding:NSUTF8StringEncoding];
+    SEL aSelector = NSSelectorFromString(sMethodName);
+    if (!aSelector)
+    {
+        NSLog(@"AKiOS_Core_CallMethod(): aSelector is NULL, %s", szMethodName);
+        return NO;
+    }
+    
+    return [anInstance respondsToSelector:aSelector];
+}
 
 void * AKiOS_Core_CallMethod(void * pInstance, const char * szMethodName, void ** ppArgs, int argsCount, void ** ppReturnedBytes)
 {
-    NSLog(@"AKiOS_Core_CallMethod(%p, %s, %d)", pInstance, szMethodName, argsCount);
+    //NSLog(@"AKiOS_Core_CallMethod(%p, %s, %d)", pInstance, szMethodName, argsCount);
     
     NSString * sMethodName = [[NSString alloc] initWithCString:szMethodName encoding:NSUTF8StringEncoding];
     SEL aSelector = NSSelectorFromString(sMethodName);
