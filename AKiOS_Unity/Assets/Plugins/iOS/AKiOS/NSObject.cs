@@ -103,7 +103,7 @@ namespace AKiOS
 
         public void setValueForKey(string key, NSObject v)
         {
-            this.Call("setValue:forKey:", new NSString(key), v);
+            this.Call("setValue:forKey:", v, new NSString(key));
         }
 
         public bool HasMethod(string methodName)
