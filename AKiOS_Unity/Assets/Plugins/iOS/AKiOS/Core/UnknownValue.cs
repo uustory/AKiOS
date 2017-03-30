@@ -56,7 +56,11 @@ namespace AKiOS.Core
 
         public IntPtr AsIntPtr()
         {
-            return new IntPtr(BitConverter.ToInt32(Bytes, 0));
+			if (IntPtr.Size == 8) {
+				return new IntPtr (BitConverter.ToInt64 (Bytes, 0));
+			} else {
+				return new IntPtr (BitConverter.ToInt32 (Bytes, 0));
+			}
         }
 
         public string AsCString()
